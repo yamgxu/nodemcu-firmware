@@ -12,7 +12,7 @@
 #     a generated lib/image xxx.a ()
 #
 ifndef PDIR
-GEN_LIBS = libmodules.a
+GEN_LIBS = libquadrotor.a
 endif
 
 STD_CFLAGS=-std=gnu11 -Wimplicit
@@ -25,7 +25,6 @@ STD_CFLAGS=-std=gnu11 -Wimplicit
 #   for a subtree within the makefile rooted therein
 #
 #DEFINES +=
-CONFIGURATION_DEFINES += -DMBEDTLS_USER_CONFIG_FILE=\"user_mbedtls.h\"
 
 #############################################################
 # Recursion Magic - Don't touch this!!
@@ -39,8 +38,6 @@ CONFIGURATION_DEFINES += -DMBEDTLS_USER_CONFIG_FILE=\"user_mbedtls.h\"
 # Required for each makefile to inherit from the parent
 #
 
-INCLUDES +=  -I ../u8g2lib/u8g2/src/clib -I ../ucglib/ucg/src/clib
-#INCLUDES += -I ../mpu6050
 PDIR := ../$(PDIR)
 sinclude $(PDIR)Makefile
 

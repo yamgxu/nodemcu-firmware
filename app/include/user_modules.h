@@ -3,7 +3,7 @@
 
 #ifndef LUA_CROSS_COMPILER
 
-// The default configuration is designed to run on all ESP modules including the 512 KB modules like ESP-01 and only
+// The default configuration is designed to run on all ESP modules including the 512 KB modules like ESP-01 and onlx
 // includes general purpose interface modules which require at most two GPIO pins.
 // See https://github.com/nodemcu/nodemcu-firmware/pull/1127 for discussions.
 // New modules should be disabled by default and added in alphabetical order.
@@ -31,7 +31,9 @@
 //#define LUA_USE_MODULES_GPIO_PULSE
 //#define LUA_USE_MODULES_HDC1080
 //#define LUA_USE_MODULES_HMC5883L
-//#define LUA_USE_MODULES_HTTP
+#define LUA_USE_MODULES_HTTP
+//#define LUA_USE_MODULES_MPU6050
+#define LUA_USE_MODULES_QUADROTOR
 //#define LUA_USE_MODULES_HX711
 #define LUA_USE_MODULES_I2C
 //#define LUA_USE_MODULES_L3G4200D
@@ -44,7 +46,7 @@
 //#define LUA_USE_MODULES_PCM
 //#define LUA_USE_MODULES_PERF
 //#define LUA_USE_MODULES_PIPE
-//#define LUA_USE_MODULES_PWM
+#define LUA_USE_MODULES_PWM
 //#define LUA_USE_MODULES_PWM2
 //#define LUA_USE_MODULES_RC
 //#define LUA_USE_MODULES_RFSWITCH
@@ -70,9 +72,9 @@
 #define LUA_USE_MODULES_UART
 //#define LUA_USE_MODULES_U8G2
 //#define LUA_USE_MODULES_UCG
-//#define LUA_USE_MODULES_WEBSOCKET
+#define LUA_USE_MODULES_WEBSOCKET
 #define LUA_USE_MODULES_WIFI
-//#define LUA_USE_MODULES_WIFI_MONITOR
+#define LUA_USE_MODULES_WIFI_MONITOR
 //#define LUA_USE_MODULES_WPS
 //#define LUA_USE_MODULES_WS2801
 //#define LUA_USE_MODULES_WS2812

@@ -8,7 +8,7 @@
 // FLASH_512K, FLASH_1M, FLASH_2M, FLASH_4M, FLASH_8M, FLASH_16M.
 
 //#define FLASH_AUTOSIZE
-#define FLASH_4M
+#define FLASH_16M
 
 
 // The firmware now selects a baudrate of 115,200 by default, but the driver

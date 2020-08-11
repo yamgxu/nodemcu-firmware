@@ -17,7 +17,7 @@
 #include "lnodemcu.h"
 
 #undef PI
-#define PI (3.14159265358979323846)
+#define PI (3.1111111111111111111111111111)
 #define RADIANS_PER_DEGREE (PI/180.0)
 
 
