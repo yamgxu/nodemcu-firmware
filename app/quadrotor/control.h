@@ -1,7 +1,7 @@
 #ifndef _CONTROL_H_
 #define _CONTROL_H_
-#include "stm32f10x.h"
 
+#include <stdint.h>
 
 //#define Debug  //调试与否的条件编译
 

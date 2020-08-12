@@ -1,5 +1,9 @@
 #include "Altitude.h"
- 
+#include "imu.h"
+#include "user_interface.h"
+#include "extern_variable.h"
+
+
 //
 float alti,Vz,Az;
 //
@@ -7,6 +11,9 @@ float z_est[3];	// estimate z Vz  Az
 static float w_z_baro=0.5f;
 static float w_z_acc=20.0f;
 static float w_acc_bias=0.05f;
+uint8_t paOffsetInited=0;
+int Baro_ALT_Updated=0;
+int MS5611_Altitude=0;
 
 /* acceleration in NED frame */
 float accel_NED[3] = { 0.0f, 0.0f, -CONSTANTS_ONE_G };
@@ -53,14 +60,16 @@ void AltitudeCombineThread(void)
 	/* accelerometer bias correction */
 	float accel_bias_corr[3] = { 0.0f, 0.0f, 0.0f };
 	uint8_t i,j;
-	
+
 	if(!paOffsetInited)	//wait baro to init its offset
 		return;
 	
-	t=micros();
+	t=system_get_time();
   dt = (tPre>0)?((t-tPre)/1000000.0f):0;
 	tPre=t;
-	//store err when sensor update 
+	//store err when sensor update
+
+
 	if(Baro_ALT_Updated)	//后面应该在sensor数值后加一个timeStamp，判断是否更新
 	{
 			corr_baro = baro_offset - MS5611_Altitude - z_est[0];		// MS5611_Altitude baro alt, is postive above offset level. not in NED. z_est is in NED frame. 
@@ -74,7 +83,7 @@ void AltitudeCombineThread(void)
 			
 			for (i = 0; i < 3; i++) 
 			{
-					accel_NED[i] = 0.0f; 
+					accel_NED[i] = 0.0f;
 					for (j = 0; j < 3; j++) {
 						accel_NED[i] += DCMbg[i][j] * accFilted[j];
 					}

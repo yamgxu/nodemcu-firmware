@@ -19,7 +19,7 @@ FLAVOR = debug
 ifeq ("$(LUA)","53")
   LUA_DIR := lua53
 else
-  LUA_DIR := lua53
+  LUA_DIR := lua
 endif
 
 ifndef PDIR # {

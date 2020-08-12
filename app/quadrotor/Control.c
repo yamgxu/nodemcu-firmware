@@ -21,25 +21,20 @@
 
 ------------------------------------
 */
-#include <stm32f10x.h>
-#include "control.h"
-#include "moto.h"
 #include "math.h"
-#include "sys_fun.h"
 #include "mpu6050.h"
 #include "imu.h"
 #include "extern_variable.h"
-#include "led.h"
-#include "stmflash.h"
 #include "ReceiveData.h"
-#include "DMP.h"
-#include "Battery.h"
+//#include "Battery.h"
 #include "stdio.h"
-#include "BT.h"
 #include "Altitude.h"
 #include "SysConfig.h"
+#include "control.h"
+#include "DMP.h"
+#include "user_interface.h"
 
-extern uint32_t micros(void);
+//extern uint32_t micros(void);
 
 uint8_t offLandFlag=0;
 
@@ -125,7 +120,7 @@ void CtrlAttiAng(void)
 		static uint32_t tPrev=0;
 		float angTarget[3]={0};
 		float dt=0,t=0;
-		t=micros();
+		t=system_get_time();//micros();
 		dt=(tPrev>0)?(t-tPrev):0;
 		tPrev=t;
 		
@@ -165,7 +160,7 @@ void CtrlAttiRate(void)
 	static uint32_t tPrev=0; 
 
 	float dt=0,t=0;
-	t=micros();
+	t=system_get_time();//micros();
 	dt=(tPrev>0)?(t-tPrev):0;
 	tPrev=t;
 		
@@ -239,20 +234,20 @@ float estimateHoverThru(void){
 	float hoverHru = -0.55f;
 	
 	//电池电压检测
-	Battery.BatteryAD  = GetBatteryAD();
-	Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压 值计算
+	//Battery.BatteryAD  = GetBatteryAD();
+	//Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压 值计算
 	
-	if(Battery.BatteryVal > 4.05){
-		hoverHru = -0.25f;
-	}else if(Battery.BatteryVal > 3.90){
-		hoverHru = -0.40f;
-	}else if(Battery.BatteryVal > 3.80){
-		hoverHru = -0.45f;
-	}else if(Battery.BatteryVal > 3.70){
-		hoverHru = -0.50f;
-	}else{
-		hoverHru = -0.55f;
-	}
+	//if(Battery.BatteryVal > 4.05){
+	//	hoverHru = -0.25f;
+	//}else if(Battery.BatteryVal > 3.90){
+	//	hoverHru = -0.40f;
+	//}else if(Battery.BatteryVal > 3.80){
+	//	hoverHru = -0.45f;
+	//}else if(Battery.BatteryVal > 3.70){
+	//	hoverHru = -0.50f;
+	//}else{
+	//	hoverHru = -0.55f;
+	//}
 	
 	
 //	if(Battery.BatteryVal > 4.05){
@@ -280,17 +275,17 @@ float estimateHoverThru(void){
 float estimateMinThru(void){
 	float minThru = -0.55f;
 	
-	//电池电压检测
-	Battery.BatteryAD  = GetBatteryAD();
-	Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压 值计算
-	
-	if(Battery.BatteryVal > 4.05){
-		minThru = -0.30f;
-	}else if(Battery.BatteryVal > 3.90){
-		minThru = -0.40f;
-	}else{
-		minThru = -0.55f;
-	}
+	////电池电压检测
+	//Battery.BatteryAD  = GetBatteryAD();
+	//Battery.BatteryVal = Battery.Bat_K * (Battery.BatteryAD/4096.0) * Battery.ADRef;//实际电压 值计算
+	//
+	//if(Battery.BatteryVal > 4.05){
+	//	minThru = -0.30f;
+	//}else if(Battery.BatteryVal > 3.90){
+	//	minThru = -0.40f;
+	//}else{
+	//	minThru = -0.55f;
+	//}
 	
 	return minThru;
 }
@@ -316,10 +311,10 @@ void CtrlAlti(void)
 	//get dt		
 	//保证dt运算不能被打断，保持更新，否则dt过大，积分爆满。
 	if(tPrev==0){
-			tPrev=micros();
+			tPrev=system_get_time();//micros();
 			return;
 	}else{
-			t=micros();
+			t=system_get_time();//micros();
 			dt=(t-tPrev) /1000000.0f;
 			tPrev=t;
 	}
@@ -332,14 +327,14 @@ void CtrlAlti(void)
 	
 	//--------------pos z ctrol---------------//
 	//get current alt 
-	alt=-nav.z;
+	//alt=-nav.z;
 	//get desired move rate from stick
 	manThr=RC_DATA.THROTTLE / 1000.0f;
 	spZMoveRate= -dbScaleLinear(manThr-0.5f,0.5f,ALT_CTRL_Z_DB);	// scale to -1~1 . NED frame
 	spZMoveRate = spZMoveRate * ALT_VEL_MAX;	// scale to vel min max
 
 	//get alt setpoint in CLIMB rate mode
-	altSp 	=-nav.z;						//only alt is not in ned frame.
+	//altSp 	=-nav.z;						//only alt is not in ned frame.
 	altSp  -= spZMoveRate * dt;	 
 	//limit alt setpoint
 	altSpOffsetMax=ALT_VEL_MAX / alt_PID.P * 2.0f;
@@ -374,7 +369,7 @@ void CtrlAlti(void)
 		zIntReset = 0;
 	}
 	
-	velZ=nav.vz;	
+	//velZ=nav.vz;
 	velZErr = posZVelSp - velZ;
 	valZErrD = (spZMoveRate - velZ) * alt_PID.P - (velZ - velZPrev) / dt;	//spZMoveRate is from manual stick vel control
 	velZPrev=velZ;
@@ -486,8 +481,8 @@ void CtrlMotor(void)
 		Motor[3] = (int16_t)(Thro - Pitch + Roll + Yaw );    //M4 
 		Motor[1] = (int16_t)(Thro + Pitch - Roll + Yaw );    //M2
 	
-   	if((FLY_ENABLE!=0)) 
-			MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);   
-		else                  
-			MotorPwmFlash(0,0,0,0); 
+   	//if((FLY_ENABLE!=0))
+	//		//MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
+	//	else
+	//		//MotorPwmFlash(0,0,0,0);
 }

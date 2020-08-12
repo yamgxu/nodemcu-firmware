@@ -1,8 +1,6 @@
 #ifndef ALT_H
 #define ALT_H
 
-#include "config.h"
-#include "MS5611.h"
 
 
 #define ALT_THREAD_PRD  5000	//ms . store error when sensor updates, but correct on each time step to avoid jumps in estimated value 
