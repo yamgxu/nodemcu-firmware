@@ -33,6 +33,7 @@
 #include "control.h"
 #include "DMP.h"
 #include "user_interface.h"
+#include "Moto.h"
 
 //extern uint32_t micros(void);
 
@@ -134,7 +135,7 @@ void CtrlAttiAng(void)
 
 		if(headFreeMode){
 			#ifdef YAW_CORRECT
-        float radDiff = -(imu.yaw - headHold) * M_PI_F / 180.0f; 
+             float radDiff = -(imu.yaw - headHold) * M_PI_F / 180.0f;
 			#else
 				float radDiff = (imu.yaw - headHold) * M_PI_F / 180.0f; 
 			#endif
@@ -207,7 +208,7 @@ float thrInit;
 const float ALT_CTRL_Z_DB = 0.1f;	//
 float spZMoveRate;
 
-uint8_t altCtrlMode;					//normal=0  CLIMB rate, normal .  tobe tested
+uint8_t altCtrlMode =MANUAL;					//normal=0  CLIMB rate, normal .  tobe tested
 float hoverThrust=0;
 uint8_t zIntReset=1;	//integral reset at first . when change manual mode to climb rate mode
 float thrustZInt=0, thrustZSp=0;
@@ -481,8 +482,8 @@ void CtrlMotor(void)
 		Motor[3] = (int16_t)(Thro - Pitch + Roll + Yaw );    //M4 
 		Motor[1] = (int16_t)(Thro + Pitch - Roll + Yaw );    //M2
 	
-   	//if((FLY_ENABLE!=0))
-	//		//MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
-	//	else
-	//		//MotorPwmFlash(0,0,0,0);
+     if((FLY_ENABLE!=0))
+  		MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
+  	else
+  		MotorPwmFlash(0,0,0,0);
 }
