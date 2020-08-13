@@ -20,7 +20,7 @@ moto.c file
 ------------------------------------
 */
 
-#include "moto.h"
+#include "Moto.h"
 #include "platform.h"
 #include <stdint.h>
 

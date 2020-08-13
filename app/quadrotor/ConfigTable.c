@@ -3,7 +3,7 @@
 **/
 
 #include "ConfigTable.h"
-#include "Control.h"
+#include "control.h"
 #include "imu.h"
 #include "SysConfig.h"
 
@@ -52,9 +52,9 @@ void TableToParam(void)
     for(i=0; i<5; i++) {
         ((u8 *)(&RX_ADDRESS))[i] = ((float *)(&table.NRFaddr))[i];
 
-        printf("RX_ADDRESS[%d]:0x%x\r\n",i,RX_ADDRESS[i]);
+
     }
-    BTstate = table.BTstate;
+  //  BTstate = table.BTstate;
     NRFMatched = table.NRFmatchFlag;
 
 }
@@ -87,8 +87,8 @@ void ParamToTable(void)
     for(i=0; i<5; i++)
         ((float *)(&table.NRFaddr))[i] = ((u8 *)(&RX_ADDRESS))[i];
 
-    table.BTstate = BTstate;
-    table.NRFmatchFlag = NRFMatched;
+    //table.BTstate = BTstate;
+   // table.NRFmatchFlag = NRFMatched;
 
 }
 

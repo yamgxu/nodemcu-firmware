@@ -1,7 +1,7 @@
 #ifndef _ReceiveData_H_
 #define _ReceiveData_H_
 
-
+#include <stdint.h>
 //RC遥控
 typedef struct int16_rcget
 {

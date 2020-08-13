@@ -9,6 +9,7 @@
 #include "../quadrotor/control.h"
 #include "../quadrotor/Moto.h"
 #include "../quadrotor/ConfigTable.h"
+#include "../quadrotor/ReceiveData.h"
 
 #include <stdio.h>
 
@@ -66,7 +67,7 @@ static int quadrotor_50Hz(lua_State* L) {
    // }
 
     //高度融合
-    AltitudeCombineThread();
+    //AltitudeCombineThread();
 
     CtrlAlti();
 
@@ -81,6 +82,15 @@ static int quadrotor_Init(lua_State* L) {
     IMU_Init();
     ParamSetDefault();
     return 1;
+}
+static int quadrotor_RC_DATA(lua_State* L) {
+
+    RC_DATA.PITCH=luaL_checknumber(L, 1);
+    RC_DATA.ROOL=luaL_checknumber(L, 2);
+    RC_DATA.YAW=luaL_checknumber(L, 3);
+    RC_DATA.THROTTLE=luaL_checknumber(L, 4);
+
+    return 0;
 }
 static int quadrotor_i2c_setup(lua_State* L) {
     unsigned id = luaL_checkinteger( L, 1 );
@@ -121,6 +131,7 @@ static int quadrotor_MPU6050AccRead(lua_State* L) {
 LROT_BEGIN(quadrotor, NULL, 0)
   LROT_FUNCENTRY( quadrotor_100Hz, quadrotor_100Hz )
   LROT_FUNCENTRY( Init, quadrotor_Init )
+  LROT_FUNCENTRY( quadrotor_RC_DATA, quadrotor_RC_DATA )
   LROT_FUNCENTRY( quadrotor_i2c_setup, quadrotor_i2c_setup )
   LROT_FUNCENTRY( quadrotor_MPU6050_initialize, quadrotor_MPU6050_initialize )
   LROT_FUNCENTRY( quadrotor_MPU6050GyroRead, quadrotor_MPU6050GyroRead )

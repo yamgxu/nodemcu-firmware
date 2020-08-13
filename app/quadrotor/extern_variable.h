@@ -1,7 +1,8 @@
 #ifndef _EXTERN_VARIABLE_H_
 #define _EXTERN_VARIABLE_H_
 
- 
+#include <stdint.h>
+
 //
 enum{BT=0,NFRC,PC,APP};
 

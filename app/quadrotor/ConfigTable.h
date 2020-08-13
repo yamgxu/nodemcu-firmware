@@ -2,7 +2,7 @@
 #define __CONFIG_TABLE_H
 //
 
-
+#include <stdint.h>
 typedef struct config_table_tt
 {
     float version;
