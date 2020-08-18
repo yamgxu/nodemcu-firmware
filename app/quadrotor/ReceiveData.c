@@ -26,7 +26,7 @@ ReceiveData.c file
 
 #include "MPU6050.h"
 #include "extern_variable.h"
-#include "control.h"
+#include "Control.h"
 #include "dmp.h"
 #include "SysConfig.h"
 #include "ConfigTable.h"
@@ -37,7 +37,7 @@ ReceiveData.c file
 
 uint8_t 		FLY_ENABLE=0;//aircraft enable
 
-RC_GETDATA  RC_DATA;//={0,0,0,0},RC_DATA_RAW={0,0,0,0};	// RC_DATA是处理后的期望四通
+RC_GETDATA  RC_DATA={0,0,0,0},RC_DATA_RAW={0,0,0,0};	// RC_DATA是处理后的期望四通
 
 extern uint32_t lastGetRCTime;
 
@@ -72,7 +72,7 @@ extern uint32_t lastGetRCTime;
 
 /*****NRF24L01 match *****/
 static uint8_t sta;
-extern u8  RX_ADDRESS[10];
+//extern u8  RX_ADDRESS[10];
 u8 NRFMatched = 0;
 
 

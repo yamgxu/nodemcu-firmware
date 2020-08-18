@@ -6,7 +6,7 @@
 #include "../quadrotor/I2C.h"
 #include "../quadrotor/sendData.h"
 #include "lauxlib.h"
-#include "../quadrotor/control.h"
+#include "../quadrotor/Control.h"
 #include "../quadrotor/Moto.h"
 #include "../quadrotor/ConfigTable.h"
 #include "../quadrotor/ReceiveData.h"
@@ -39,7 +39,7 @@ static int quadrotor_100Hz(lua_State* L) {
     }
 
     CtrlAttiRate();
-    CtrlMotor();
+    //CtrlMotor();
 
     int16_t ii = (int16_t) luaL_checknumber(L, 1);
     if(ii>0){
@@ -54,6 +54,27 @@ static int quadrotor_100Hz(lua_State* L) {
     lua_pushnumber(L, imu.yaw);
     return 3;
 
+}
+static int CtrlMotor2(lua_State* L) {
+
+    //RCDataProcess();
+
+    //FlightModeFSMSimple();
+
+   // if(altCtrlMode==LANDING)
+   // {
+   // AutoLand();
+   // }
+
+    //高度融合
+    //AltitudeCombineThread();
+    int16_t a[4]={0};
+    CtrlMotor1(a);
+    lua_pushnumber(L, a[0]);
+    lua_pushnumber(L, a[1]);
+    lua_pushnumber(L, a[2]);
+    lua_pushnumber(L, a[3]);
+    return 4;
 }
 static int quadrotor_50Hz(lua_State* L) {
 
@@ -76,8 +97,13 @@ static int quadrotor_50Hz(lua_State* L) {
     return 0;
 }
 static int quadrotor_Init(lua_State* L) {
+    RC_DATA.PITCH=0.0;
+    RC_DATA.ROOL=0.0;
+    RC_DATA.YAW=0.0;
+    RC_DATA.THROTTLE=0.0;
 
     altCtrlMode=MANUAL;
+    FLY_ENABLE=1;
     MotorInit();
     IMU_Init();
     ParamSetDefault();
@@ -91,6 +117,15 @@ static int quadrotor_RC_DATA(lua_State* L) {
     RC_DATA.THROTTLE=luaL_checknumber(L, 4);
 
     return 0;
+}
+
+static int quadrotor_read_RC_DATA(lua_State* L) {
+
+    lua_pushnumber(L,  RC_DATA.PITCH);
+    lua_pushnumber(L,  RC_DATA.YAW);
+    lua_pushnumber(L,  RC_DATA.ROOL);
+    lua_pushnumber(L,  RC_DATA.THROTTLE);
+    return 4;
 }
 static int quadrotor_i2c_setup(lua_State* L) {
     unsigned id = luaL_checkinteger( L, 1 );
@@ -130,8 +165,11 @@ static int quadrotor_MPU6050AccRead(lua_State* L) {
 // Module function map
 LROT_BEGIN(quadrotor, NULL, 0)
   LROT_FUNCENTRY( quadrotor_100Hz, quadrotor_100Hz )
+  LROT_FUNCENTRY( quadrotor_50Hz, quadrotor_50Hz )
   LROT_FUNCENTRY( Init, quadrotor_Init )
+  LROT_FUNCENTRY( CtrlMotor2, CtrlMotor2 )
   LROT_FUNCENTRY( quadrotor_RC_DATA, quadrotor_RC_DATA )
+  LROT_FUNCENTRY( quadrotor_read_RC_DATA, quadrotor_read_RC_DATA )
   LROT_FUNCENTRY( quadrotor_i2c_setup, quadrotor_i2c_setup )
   LROT_FUNCENTRY( quadrotor_MPU6050_initialize, quadrotor_MPU6050_initialize )
   LROT_FUNCENTRY( quadrotor_MPU6050GyroRead, quadrotor_MPU6050GyroRead )

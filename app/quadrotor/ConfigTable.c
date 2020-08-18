@@ -3,7 +3,7 @@
 **/
 
 #include "ConfigTable.h"
-#include "control.h"
+#include "Control.h"
 #include "imu.h"
 #include "SysConfig.h"
 
@@ -17,7 +17,7 @@ uint8_t gParamsSaveEEPROMRequset=0;
 
 
 
-extern u8 RX_ADDRESS[10];
+ u8 RX_ADDRESS[10];
 
 
 extern u8 NRFMatched;

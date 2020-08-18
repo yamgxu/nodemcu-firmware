@@ -22,7 +22,7 @@
 ------------------------------------
 */
 #include "math.h"
-#include "mpu6050.h"
+#include "MPU6050.h"
 #include "imu.h"
 #include "extern_variable.h"
 #include "ReceiveData.h"
@@ -30,7 +30,7 @@
 #include "stdio.h"
 #include "Altitude.h"
 #include "SysConfig.h"
-#include "control.h"
+#include "Control.h"
 #include "DMP.h"
 #include "user_interface.h"
 #include "Moto.h"
@@ -90,7 +90,7 @@ static void PID_Postion_Cal(PID_Typedef * PID,float target,float measure,int32_t
 	PID->PreError=PID->Error;
 	//仅用于角度环和角速度环的
 
-	if(FLY_ENABLE && offLandFlag){
+	if(FLY_ENABLE){ // && offLandFlag
 		if(fabs(PID->Output) < Thro )		              //比油门还大时不积分
 		{
 			termI=(PID->Integ) + (PID->Error) * dt;     //积分环节
@@ -460,30 +460,55 @@ void CtrlAlti(void)
 //输入：无
 //输出: 4个电机的PWM输出
 //描述：输出PWM，控制电机，本函数会被主循环中100Hz循环调用
-void CtrlMotor(void)
+void CtrlMotor( void)
 {
-		float  cosTilt = imu.accb[2] / ONE_G;
+	//float  cosTilt = imu.accb[2] / ONE_G;
 	
-		if(altCtrlMode==MANUAL)
-		{
-			DIF_ACC.Z =  imu.accb[2] - ONE_G;
-			Thro = RC_DATA.THROTTLE;
-			cosTilt=imu.DCMgb[2][2];
-			Thro=Thro/cosTilt;
-		}else{
-			Thro=(-thrustZSp) * 1000;// /imu.DCMgb[2][2];  //倾角补偿后效果不错，有时过猛
-			if(Thro>1000)
-				Thro=1000;
-		}
-		
-		//将输出值融合到四个电机 
-		Motor[2] = (int16_t)(Thro - Pitch - Roll - Yaw );    //M3  
-		Motor[0] = (int16_t)(Thro + Pitch + Roll - Yaw );    //M1
-		Motor[3] = (int16_t)(Thro - Pitch + Roll + Yaw );    //M4 
-		Motor[1] = (int16_t)(Thro + Pitch - Roll + Yaw );    //M2
-	
-     if((FLY_ENABLE!=0))
-  		MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
-  	else
-  		MotorPwmFlash(0,0,0,0);
+	//if(altCtrlMode==MANUAL)
+	//{
+	//	DIF_ACC.Z =  imu.accb[2] - ONE_G;
+	//	Thro = RC_DATA.THROTTLE;
+	//	cosTilt=imu.DCMgb[2][2];
+	//	Thro=Thro/cosTilt;
+	//}else{
+	//	Thro=(-thrustZSp) * 1000;// /imu.DCMgb[2][2];  //倾角补偿后效果不错，有时过猛
+	//	if(Thro>1000)
+	//		Thro=1000;
+	//}
+       //Thro = RC_DATA.THROTTLE;
+    Thro=500;
+	////将输出值融合到四个电机
+	 Motor[2] = (int16_t)(Thro - Pitch - Roll - Yaw );    //M3
+	 Motor[0] = (int16_t)(Thro + Pitch + Roll - Yaw );    //M1
+	 Motor[3] = (int16_t)(Thro - Pitch + Roll + Yaw );    //M4
+	 Motor[1] = (int16_t)(Thro + Pitch - Roll + Yaw );    //M2
+
+    //MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
+  //   if((FLY_ENABLE!=0))
+  //
+  //	else
+  //		MotorPwmFlash(0,0,0,0);
+
+}
+void  CtrlMotor1 ( int16_t a[] )
+{
+    //float  cosTilt = imu.accb[2] / ONE_G;
+
+    //if(altCtrlMode==MANUAL)
+    //{
+    //	DIF_ACC.Z =  imu.accb[2] - ONE_G;
+    //	Thro = RC_DATA.THROTTLE;
+    //	cosTilt=imu.DCMgb[2][2];
+    //	Thro=Thro/cosTilt;
+    //}else{
+    //	Thro=(-thrustZSp) * 1000;// /imu.DCMgb[2][2];  //倾角补偿后效果不错，有时过猛
+    //	if(Thro>1000)
+    //		Thro=1000;
+    //}
+    //Thro = RC_DATA.THROTTLE;
+
+  a[0] =Pitch;
+  a[1] =Roll;
+  a[2] =Yaw;
+  a[3] =Thro;
 }
