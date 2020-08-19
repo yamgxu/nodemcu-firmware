@@ -476,14 +476,14 @@ void CtrlMotor( void)
 	//		Thro=1000;
 	//}
        //Thro = RC_DATA.THROTTLE;
-    Thro=500;
+     Thro=500;
 	////将输出值融合到四个电机
 	 Motor[2] = (int16_t)(Thro - Pitch - Roll - Yaw );    //M3
 	 Motor[0] = (int16_t)(Thro + Pitch + Roll - Yaw );    //M1
 	 Motor[3] = (int16_t)(Thro - Pitch + Roll + Yaw );    //M4
 	 Motor[1] = (int16_t)(Thro + Pitch - Roll + Yaw );    //M2
 
-    //MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
+     MotorPwmFlash(Motor[0],Motor[1],Motor[2],Motor[3]);
   //   if((FLY_ENABLE!=0))
   //
   //	else
@@ -511,4 +511,22 @@ void  CtrlMotor1 ( int16_t a[] )
   a[1] =Roll;
   a[2] =Yaw;
   a[3] =Thro;
+}
+void  CtrlMotor3 ( int16_t a[] )
+{
+    //float  cosTilt = imu.accb[2] / ONE_G;
+
+    //if(altCtrlMode==MANUAL)
+    //{
+    //	DIF_ACC.Z =  imu.accb[2] - ONE_G;
+    //	Thro = RC_DATA.THROTTLE;
+    //	cosTilt=imu.DCMgb[2][2];
+    //	Thro=Thro/cosTilt;
+    //}else{
+    //	Thro=(-thrustZSp) * 1000;// /imu.DCMgb[2][2];  //倾角补偿后效果不错，有时过猛
+    //	if(Thro>1000)
+    //		Thro=1000;
+    //}
+    //Thro = RC_DATA.THROTTLE;
+    MotorPwmFlash(a[0],a[1],a[2],a[3]);
 }

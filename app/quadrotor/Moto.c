@@ -46,15 +46,10 @@ void MotorPwmFlash(int16_t MOTO1_PWM,int16_t MOTO2_PWM,int16_t MOTO3_PWM,int16_t
      if(MOTO2_PWM<=0)	MOTO2_PWM = 0;
      if(MOTO3_PWM<=0)	MOTO3_PWM = 0;
      if(MOTO4_PWM<=0)	MOTO4_PWM = 0;//限定输入不能小于0，大于999
-    platform_pwm_setup( 1, 100,MOTO1_PWM );
-    platform_pwm_setup( 2, 100,MOTO2_PWM );
-    platform_pwm_setup( 3, 100,MOTO3_PWM );
-    platform_pwm_setup( 4, 100,MOTO4_PWM );
-    platform_pwm_start( 1 );
-    platform_pwm_start( 2 );
-    platform_pwm_start( 3 );
-    platform_pwm_start( 4 );
-
+    platform_pwm_set_duty( 1,  (u32)MOTO1_PWM );
+    platform_pwm_set_duty( 2,  (u32)MOTO2_PWM );
+    platform_pwm_set_duty( 3,  (u32)MOTO3_PWM );
+    platform_pwm_set_duty( 4,  (u32)MOTO4_PWM );
 }
 
 /***********************************************

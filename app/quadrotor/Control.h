@@ -64,6 +64,7 @@ void CtrlAlti(void);
 void CtrlAltiVel(void);
 void CtrlMotor(void);
 void  CtrlMotor1 ( int16_t a[] );
+void  CtrlMotor3 ( int16_t a[] );
 void CtrlTest(void);
 void CtrlAttiRateNew(void);
 void CtrlAttiNew(void);

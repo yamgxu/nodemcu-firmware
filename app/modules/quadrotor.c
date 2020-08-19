@@ -39,7 +39,7 @@ static int quadrotor_100Hz(lua_State* L) {
     }
 
     CtrlAttiRate();
-    //CtrlMotor();
+    CtrlMotor();
 
     int16_t ii = (int16_t) luaL_checknumber(L, 1);
     if(ii>0){
@@ -75,6 +75,22 @@ static int CtrlMotor2(lua_State* L) {
     lua_pushnumber(L, a[2]);
     lua_pushnumber(L, a[3]);
     return 4;
+}
+static int CtrlMotor4(lua_State* L) {
+     float a1 = luaL_checknumber(L, 1);
+     float a2 = luaL_checknumber(L, 2);
+     float a3 = luaL_checknumber(L, 3);
+     float a4 = luaL_checknumber(L, 4);
+
+    int16_t a[4]={0};
+    a[0]=a1;
+    a[0]=a2;
+    a[0]=a3;
+    a[0]=a4;
+
+    CtrlMotor3(a);
+
+    return 0;
 }
 static int quadrotor_50Hz(lua_State* L) {
 
@@ -168,6 +184,7 @@ LROT_BEGIN(quadrotor, NULL, 0)
   LROT_FUNCENTRY( quadrotor_50Hz, quadrotor_50Hz )
   LROT_FUNCENTRY( Init, quadrotor_Init )
   LROT_FUNCENTRY( CtrlMotor2, CtrlMotor2 )
+  LROT_FUNCENTRY( CtrlMotor4, CtrlMotor4 )
   LROT_FUNCENTRY( quadrotor_RC_DATA, quadrotor_RC_DATA )
   LROT_FUNCENTRY( quadrotor_read_RC_DATA, quadrotor_read_RC_DATA )
   LROT_FUNCENTRY( quadrotor_i2c_setup, quadrotor_i2c_setup )
